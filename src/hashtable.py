@@ -76,9 +76,17 @@ class HashTable:
 
         Print a warning if the key is not found.
 
-        Fill this in.
         '''
-        pass
+        # Find the key
+        index = self._hash_mod(key)
+
+        # Error handling
+        if self.storage[index] is None:
+          print(f"WARNING: Key not found")
+          return
+
+        # Remove the value by reassigning the index to none
+        self.storage[index] = None
 
 
     def retrieve(self, key):
@@ -91,6 +99,7 @@ class HashTable:
         # Hash the key
         index = self._hash_mod(key)
 
+        # Return storage at index
         return self.storage[index]
 
     def resize(self):
