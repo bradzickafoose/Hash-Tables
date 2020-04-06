@@ -15,6 +15,7 @@ class HashTable:
     def __init__(self, capacity):
         self.capacity = capacity  # Number of buckets in the hash table
         self.storage = [None] * capacity
+        self.count = 0
 
 
     def _hash(self, key):
@@ -86,10 +87,11 @@ class HashTable:
 
         Returns None if the key is not found.
 
-        Fill this in.
         '''
-        pass
+        # Hash the key
+        index = self._hash_mod(key)
 
+        return self.storage[index]
 
     def resize(self):
         '''
