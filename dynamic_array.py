@@ -3,3 +3,14 @@ class DynamicArray:
     self.count = 0   # Number of elements in the array
     self.capacity = capacity   # Total amount of storage in the array
     self.storage = [None] * capacity
+
+  def insert(self, index, value):
+    # Check if we have enough capacity
+    if self.count >= self.capacity:
+      # If not, add more capacity
+      self.resize()
+    # Shift over every item after index to the right by 1
+    for i in range(self.count, index, -1):
+      self.storage[i] = self.storage[i-1]
+    # Add the new value to the index
+    self.storage[index] = value
