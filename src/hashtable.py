@@ -52,10 +52,21 @@ class HashTable:
 
         # Part 2: Change this so that hash collisions are handled with Linked List Chaining.
 
-        Fill this in.
         '''
-        pass
+        # Hash the key
+        index = self._hash_mod(key)
 
+        # Check if the hast table has enough capacity
+        if self.count >= self.capacity:
+          # If not, add more capacity
+          self.resize()
+
+        # Error handling
+        if self.storage[index] is not None:
+          print(f"WARNING: Overwriting data at {index} ")
+
+        # Set the index to value
+        self.storage[index] = value
 
 
     def remove(self, key):
