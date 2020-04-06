@@ -14,3 +14,15 @@ class DynamicArray:
       self.storage[i] = self.storage[i-1]
     # Add the new value to the index
     self.storage[index] = value
+    # Increment count
+    self.count += 1
+
+ def append(self, value):
+    # Check if we have enough capacity
+    if self.count >= self.capacity:
+      # If not, double the size
+      self.resize()
+    # Add value to the index of count
+    self.storage[self.count] = value
+    # Increment count
+    self.count += 1
