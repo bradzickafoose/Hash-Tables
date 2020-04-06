@@ -66,8 +66,8 @@ class HashTable:
         if self.storage[index] is not None:
           print(f"WARNING: Overwriting data at {index} ")
 
-        # Set the index to value
-        self.storage[index] = value
+        # Set the index to LinkedPair with key and value
+        self.storage[index] = LinkedPair(key, value)
 
 
     def remove(self, key):
@@ -99,17 +99,33 @@ class HashTable:
         # Hash the key
         index = self._hash_mod(key)
 
-        # Return storage at index
-        return self.storage[index]
+        # Return storage at index value
+        if self.storage[index] is not None:
+          if self.storage[index].key == key:
+            return self.storage[index].value
+          else:
+            print(f"WARNING: Key doesn't match")
+            return
+
+        else:
+          return None
 
     def resize(self):
         '''
         Doubles the capacity of the hash table and
         rehash all key/value pairs.
 
-        Fill this in.
         '''
-        pass
+        # Double the capacity
+        self.capacity *= 2
+        # Allocate a new storage array with double capacity
+        new_storage = [None] * self.capacity
+        # Copy all elements from the old storage to new
+        for bucket_item in self.storage:
+          new_index = self._hash_mod(bucket_item.key)
+          new_storage[new_index] = LinkedPair(bucket_item.key, bucket_item.value)
+
+        self.storage = new_storage
 
 
 
