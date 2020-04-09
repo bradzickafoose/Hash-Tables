@@ -5,6 +5,7 @@ class DynamicArray:
     self.storage = [None] * capacity
 
   def insert(self, index, value):
+    # O(n) – (most of the time)
     # Check if we have enough capacity
     if self.count >= self.capacity:
       # If not, add more capacity
@@ -18,6 +19,7 @@ class DynamicArray:
     self.count += 1
 
 def append(self, value):
+    # O(1) – (most of the time)
     # Check if we have enough capacity
     if self.count >= self.capacity:
       # If not, double the size
@@ -35,10 +37,12 @@ def resize(self):
   # Copy all elements from old storage to new
   for i in range(self.count):
     new_storage[i] = self.storage[i]
-  self.storage = new_storag
+  self.storage = new_storage
 
 
 a = DynamicArray(2)
 a.insert(0, 10)
 a.insert(0, 11)
 print(a.storage)
+
+
