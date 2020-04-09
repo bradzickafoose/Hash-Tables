@@ -54,20 +54,44 @@ class HashTable:
         # Part 2: Change this so that hash collisions are handled with Linked List Chaining.
 
         '''
-        # Hash the key
-        index = self._hash_mod(key)
 
         # Check if the hast table has enough capacity
         if self.count >= self.capacity:
           # If not, add more capacity
           self.resize()
 
-        # Error handling
-        if self.storage[index] is not None:
-          print(f"WARNING: Overwriting data at {index} ")
+        # Hash the key and set it to index
+        index = self._hash_mod(key)
 
-        # Set the index to LinkedPair with key and value
-        self.storage[index] = LinkedPair(key, value)
+        # Set the new node to singly linked list
+        new_node = LinkedPair(key, value)
+
+        # If there is an existing node here
+        if self.storage[index] is not None:
+
+          # Set the node to the Node at [index]
+          node = self.storage[index]
+
+          # Traverse node at that location
+          while node is not None:
+
+            # If the node key matches the key parameter, set the node value to value parameter
+            if node.key == key:
+              node.value = value
+              break
+
+            # If there's no node at the next index, end the function
+            if node.next is None:
+              break
+
+            node = node.next
+
+          # Add the new node to the end of the linked list chain
+          node.next = new_node
+
+        # If there is no node at this location, set location to LinkedPair with key and value
+        else:
+          self.storage[index] = new_node
 
 
     def remove(self, key):
@@ -77,13 +101,30 @@ class HashTable:
         Print a warning if the key is not found.
 
         '''
-        # Find the key
+        # Hash the key and set it to index
         index = self._hash_mod(key)
 
-        # Error handling
-        if self.storage[index] is None:
-          print(f"WARNING: Key not found")
-          return
+
+        if self.storage[index] is not None:
+          current_node = self.storage[index]
+          previous_node = None
+
+          while True:
+            if current_node.key == key:
+              if previous_node is None:
+                self.storage[index] = current_node.next
+              else:
+                previous_node.next = current_node.next
+              return
+
+            if current_node.next is None:
+              break
+
+            previous_node = current_node
+            current_node = current_node.next
+
+        print(f"WARNING: Key {key} not found")
+
 
         # Remove the value by reassigning the index to none
         self.storage[index] = None
@@ -101,14 +142,18 @@ class HashTable:
 
         # Return storage at index value
         if self.storage[index] is not None:
-          if self.storage[index].key == key:
-            return self.storage[index].value
-          else:
-            print(f"WARNING: Key doesn't match")
-            return
+          current_node = self.storage[index]
 
-        else:
-          return None
+          while True:
+            if current_node.key == key:
+              return current_node.value
+
+            if current_node.next is None:
+              break
+
+            current_node = current_node.next
+
+        return None
 
     def resize(self):
         '''
@@ -118,14 +163,19 @@ class HashTable:
         '''
         # Double the capacity
         self.capacity *= 2
-        # Allocate a new storage array with double capacity
-        new_storage = [None] * self.capacity
-        # Copy all elements from the old storage to new
-        for bucket_item in self.storage:
-          new_index = self._hash_mod(bucket_item.key)
-          new_storage[new_index] = LinkedPair(bucket_item.key, bucket_item.value)
 
-        self.storage = new_storage
+        # Set the old storage to the current storage
+        old_storage = self.storage
+
+        # Set the storage buckets to none
+        self.storage = [None] * self.capacity
+
+        # Copy all elements from the old storage to new
+        for node in old_storage:
+
+          while node is not None:
+            self.insert(node.key, node.value)
+            node = node.next
 
 
 
